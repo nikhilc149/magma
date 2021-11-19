@@ -1,0 +1,12 @@
+[Unit]
+Description=Run Once Before First Boot
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/root/myscript.sh
+ExecStop=/root/stopmyscript.sh
+
+
+[Install]
+WantedBy=multi-user.target
