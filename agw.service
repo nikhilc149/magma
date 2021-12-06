@@ -1,12 +1,11 @@
 [Unit]
-Description=Run Once Before First Boot
+Description=install magma core and post installation activities
 After=network.target
 
 [Service]
-Type=oneshot
-ExecStart=/root/myscript.sh
-ExecStop=/root/stopmyscript.sh
-
+Type=simple
+ExecStart=/bin/bash /root/agw_install_ubuntu.sh &> /root/magma.txt
+RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
