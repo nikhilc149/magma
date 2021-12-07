@@ -30,7 +30,7 @@ AGW_INSTALL_CONFIG="/lib/systemd/system/agw_installation.service"
 AGW_SCRIPT_PATH="/root/agw_install_ubuntu.sh"
 DEPLOY_PATH="/home/$MAGMA_USER/magma/lte/gateway/deploy"
 SUCCESS_MESSAGE="ok"
-NEED_REBOOT=0
+NEED_REBOOT=1
 WHOAMI=$(whoami)
 MAGMA_VERSION="${MAGMA_VERSION:-v1.6}"
 CLOUD_INSTALL="cloud"
@@ -200,17 +200,24 @@ EOF
 	
 	  if [ "$magma_status" != "$MAGMA_INSTALLED_STATUS" ] && [ "$magma_status" != "$MAGMA_INSTALLING_STATUS" ]; then
 	        sed -i -e '/magma_status=/s/=.*/=Installing/' $MAGMA_STATUS_FILE
-	        reboot
+	    	reboot
 	  fi
 	
 	fi
-	
+
+	if [ "$magma_status" == "$MAGMA_INSTALLING_STATUS" ]; then	
+		systemctl stop agw
+		systemctl disable agw
+		systemctl mask agw
+	fi
+
 	echo "Checking if magma has been installed"
 	MAGMA_INSTALLED=$(apt-cache show magma >  /dev/null 2>&1 echo "$SUCCESS_MESSAGE")
 	if [ "$MAGMA_INSTALLED" != "$SUCCESS_MESSAGE" ]; then
 	  echo "Magma not installed, processing installation"
 	  apt-get -y install curl make virtualenv zip rsync git software-properties-common python3-pip python-dev apt-transport-https
-	
+
+  	  dpkg --configure -a	  
 	  alias python=python3
 	  pip3 install ansible
 	
@@ -242,3 +249,4 @@ EOF
 	  echo "Magma already installed, skipping.."
 	fi
 fi
+
