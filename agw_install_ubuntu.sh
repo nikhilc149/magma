@@ -19,9 +19,10 @@ gw_addr=""
 MAGMA_STATUS_FILE=/root/magma_status.txt
 INSTALLER_DIR="/home/installer"
 UBUNTU_SERVER_DIR="/home/ubuntu-server/"
-MAGMA_NOT_INSTALL="Not"
-MAGMA_INSTALLING="Installing"
-MAGMA_INSTALLED="Installed"
+MAGMA_NOT_INSTALL_STATUS="Ubuntu"
+MAGMA_INSTALLING_STATUS="Installing"
+MAGMA_INSTALLED_STATUS="Installed"
+MAGMA_POST_INASTALLED="PostInstalled"
 
 MAGMA_USER="magma"
 AGW_INSTALL_CONFIG_LINK="/etc/systemd/system/multi-user.target.wants/agw_installation.service"
@@ -50,7 +51,7 @@ else
 	
 	source $MAGMA_STATUS_FILE
 	
-	if [ "$magma_status" == "$MAGMA_INSTALLED" ]; then
+	if [ "$magma_status" == "$MAGMA_INSTALLED_STATUS" ]; then
 	        systemctl stop agw
 	        systemctl disable agw
 	        systemctl mask agw
@@ -197,7 +198,7 @@ EOF
 	  ln -sf $AGW_INSTALL_CONFIG $AGW_INSTALL_CONFIG_LINK
 	
 	
-	  if [ "$magma_status" != "$MAGMA_INSTALLED" ] && [ "$magma_status" != "$MAGMA_INSTALLING" ]; then
+	  if [ "$magma_status" != "$MAGMA_INSTALLED_STATUS" ] && [ "$magma_status" != "$MAGMA_INSTALLING_STATUS" ]; then
 	        sed -i -e '/magma_status=/s/=.*/=Installing/' $MAGMA_STATUS_FILE
 	        reboot
 	  fi
@@ -233,7 +234,7 @@ EOF
 	  echo "AGW installation is done, Run agw_post_install_ubuntu.sh install script after reboot to finish installation"
 	  wget https://raw.githubusercontent.com/magma/magma/"$MAGMA_VERSION"/lte/gateway/deploy/agw_post_install_ubuntu.sh -P /root/
 	
-	  if [ "$magma_status" != "$MAGMA_NOT_INSTALL" ] && [ "$magma_status" != "$MAGMA_INSTALLED" ]; then
+	  if [ "$magma_status" != "$MAGMA_NOT_INSTALL_STATUS" ] && [ "$magma_status" != "$MAGMA_INSTALLED_STATUS" ]; then
 	        sed -i -e '/magma_status=/s/=.*/=Installed/' $MAGMA_STATUS_FILE
 	        reboot
 	  fi
