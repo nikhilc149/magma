@@ -4,6 +4,7 @@ CONTROL_PROXY_FILE_PATH="/var/opt/magma/configs/control_proxy.yml"
 
 create_control_proxy_yml_file()
 {
+    mkdir -p /var/opt/magma/configs/ 
     > $CONTROL_PROXY_FILE_PATH
     echo "Creating control_proxy.yml file"
     echo "
