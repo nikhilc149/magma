@@ -1,0 +1,10 @@
+cloud_address: controller.dev-gxcnetwork.com
+cloud_port: 443
+
+bootstrap_address: bootstrapper-controller.dev-gxcnetwork.com
+bootstrap_port: 443
+
+fluentd_address: fluentd.dev-gxcnetwork.com
+fluentd_port: 24224
+
+rootca_cert: /var/opt/magma/tmp/certs/rootCA.pem
